@@ -22,7 +22,18 @@
 
 ## 1. 유한체
 
-| Content | Link |
-| ------- | ---- |
-| Code    |      |
-| Post    |      |
+<table>
+  <tbody>
+    <tr>
+      <th align="left">Code</th>
+      <td><a href="https://github.com/JayChae/programming-bitcoin-go/blob/main/chapter1-finite-field/field-element.go">field-element.go</a></td>
+    </tr>
+    <tr>
+      <th align="left">Post</th>
+      <td><a href="https://jaychae.github.io/programming-bitcoin-go/chapter1-finite-field/index.html">한국어</a>
+      <br/>
+      <a href="https://jaychae.github.io/programming-bitcoin-go/chapter1-finite-field/en.html">English</a>
+      </td>
+    </tr>
+  </tbody>
+  </table>
