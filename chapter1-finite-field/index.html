@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://latex.vercel.app/style.css" />
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+    />
+
+    <title>Chapter 1: 유한체</title>
+  </head>
+  <body style="font-family: Pretendard Variable">
+    <article>
+      <h1>Chapter 1: 유한체</h1>
+      <p class="author">
+        Ivar <br />
+        October 20, 2025<br />
+        <a href="./en.html">English</a>
+      </p>
+
+      <div class="abstract">
+        <h2>Abstract</h2>
+        <p>
+          비트코인 서명과 검증에 사용하는 타원곡선 암호의 기반이 되는 수학
+          개념인 유한체를 이해하고 Go 언어로 유한체 연산을 구현해 본다.
+        </p>
+      </div>
+
+      <h2>유한체의 정의</h2>
+      <p>
+        유한체(Finite Field)는 원소의 수가 유한하며 다음의 성질을 만족하는
+        집합이다:
+      </p>
+      <ol>
+        <li>
+          a와 b가 집합에 속해 있으면, a+b와 a*b도 집합 안에 있다 (덧셈과 곱셈에
+          닫혀있는 집합)
+        </li>
+        <li>
+          집합에 0으로 표기하는 원소가 존재하고 집합 내 다른 원소 a와 + 연산
+          결과는 a다. 즉 a + 0 = a (덧셈의 항등원 존재)
+        </li>
+        <li>
+          집합에 1로 표기하는 원소가 존재하고 집합 내 다른 원소 a와 * 연산
+          결과는 a다. 즉 a * 1 = a (곱셈의 항등원 존재)
+        </li>
+        <li>
+          집합의 원소 a와 + 연산 결과가 0이 되게 하는 원소 b가 역시 집합에 속해
+          있고 이러한 b를 -a로 표기한다 (덧셈에 대한 역원 존재)
+        </li>
+        <li>
+          0이 아닌 집합의 원소 a에 대해 a * b = 1이 되게 하는 원소 b가 역시
+          집합에 속해 있고 이러한 b를 a<sup>-1</sup>로 표기한다 (곱셈에 대한
+          역원 존재)
+        </li>
+      </ol>
+      <p>
+        유한체의 원소의 수를 위수(order)라고 한다. 위수를 p로 표기하고 p는
+        소수이다.
+      </p>
+
+      <h2>유한집합 정의하기</h2>
+      <p>
+        집합의 위수가 p이면 집합의 원소는 0, 1, 2, ... p-1로 쓸 수 있으며 다음과
+        같이 표기한다.
+      </p>
+      <p>F<sub>p</sub> = { 0, 1, 2, ... p-1 }</p>
+      <p>
+        유한체의 위수(p)는 항상 가장 큰 숫자 원소(p-1)보다 하나가 더 많습니다.
+        또한 유한체는 반드시 소수(prime)이거나 소수의 거듭제곱을 위수로 가져야
+        한다.
+      </p>
+
+      <h2>나머지 연산</h2>
+      <p>
+        나머지 연산 유한체의 정의에 따르면 유한체는 덧셈, 곱셈, 뺄셈(덧셈의
+        역원), 나눗셈(곱셈의 역원)에 대해 집합이 닫혀
+        <label for="sn-1" class="sidenote-toggle sidenote-number"></label>
+        <input type="checkbox" id="sn-1" class="sidenote-toggle" />
+        <span class="sidenote">
+          닫혀 있는다는 말은 연산의 결과도 그 집합 안에 있다는 의미이다.
+        </span>
+        있어야 한다.
+      </p>
+      <p>
+        한정된 범위의 값을 사용해서 유한체를 구현하기 위해서 나머지 연산(Modulo
+        Arithmatic)을 사용한다. 아무리 큰 수라도 나머지 연산을 적용하면 작은
+        범위의 수로 변환된다. 예를 들어, 12로 나머지 연산을 실행하는 경우에는
+        아무리 큰 수라도 0에서 11 사이의 수로 변환된다. 마치 아무리 시간이
+        흐르더라도 시곗바늘은 0부터 11까지의 수를 가리키는 것과 같다.
+      </p>
+
+      <h2>유한체 연산 정의</h2>
+      <sub>f</sub>은 유한체 연산을 일반 정수 연산과 구별하기 위한 표시이다.
+      <h3>덧셈</h3>
+      <p>덧셈은 두 원소의 합을 계산하고 위수 p로 나머지 연산을 실행한다.</p>
+      <p>a +<sub>f</sub> b = (a + b) % p</p>
+
+      <h3>뺄셈</h3>
+      <p>뺄셈은 두 원소의 차를 계산하고 위수 p로 나머지 연산을 실행한다.</p>
+      <p>a -<sub>f</sub> b = (a - b) mod p</p>
+
+      <h3>역원</h3>
+      <p>역원은 두 원소의 역을 계산하고 위수 p로 나머지 연산을 실행한다.</p>
+      <p>-a<sub>f</sub> = (-a) % p</p>
+
+      <h3>곱셈</h3>
+      <p>곱셈은 두 원소의 곱을 계산하고 위수 p로 나머지 연산을 실행한다.</p>
+      <p>a *<sub>f</sub> b = (a * b) % p</p>
+
+      <h3>거듭제곱</h3>
+      <p>거듭제곱은 원소를 여러 번 곱하고 위수 p로 나머지 연산을 실행한다.</p>
+      <p>a<sup>b</sup> = (a<sup>b</sup>) % p</p>
+
+      <h3>나눗셈</h3>
+      <h4>페르마의 소정리</h4>
+      <p>페르마의 소정리는 소수 p에 대해 다음과 같은 성질을 만족한다.</p>
+      <p>n<sup>(p-1)</sup> % p = 1</p>
+      <p>
+        이를 이용하여 나눗셈을 곱셈으로 변환할 수 있다.
+        <label for="sn-2" class="sidenote-toggle sidenote-number"></label>
+        <input type="checkbox" id="sn-2" class="sidenote-toggle" />
+        <span class="sidenote">
+          페르마의 소정리에 따르면 b<sup>(p-1)</sup> = 1 = b<sup>-1</sup> * 1
+          이므로 b<sup>-1</sup> * b<sup>(p-1)</sup> = b<sup>(p-2)</sup>따라서
+          b<sup>-1</sup> = b<sup>(p-2)</sup>
+        </span>
+      </p>
+      <p>a / b = a * b<sup>-1</sup> = a * b<sup>(p-2)</sup></p>
+
+      <h2>Go 언어로 유한체 연산 구현</h2>
+
+      <h3>1. 유한체 원소 정의</h3>
+      <p>
+        유한체의 원소를 나타내는 구조체를 정의합니다. 각 원소는 값(num)과
+        소수(prime)를 가집니다.
+      </p>
+      <pre><code class="language-go">// 유한체의 원소를 나타내는 구조체
+type FieldElement struct {
+    num   int
+    prime int
+}</code></pre>
+
+      <h3>2. 유한체 원소 생성자</h3>
+      <p>
+        유한체 원소를 생성하는 함수입니다. 값이 유한체 범위(0 ≤ num < prime)를
+        벗어나면 오류를 반환합니다.
+      </p>
+      <pre><code class="language-go">// 유한체 원소 생성
+func NewFieldElement(num, prime int) (*FieldElement, error) {
+    if num >= prime || num < 0 {
+        return nil, fmt.Errorf("num %d not in field range 0 to %d", num, prime-1)
+    }
+    return &FieldElement{num, prime}, nil
+}</code></pre>
+
+      <h3>3. 문자열 표현</h3>
+      <p>유한체 원소를 문자열로 출력하는 메서드입니다.</p>
+      <pre><code class="language-go">// 유한체 원소를 문자열로 반환하는 함수
+func (f *FieldElement) String() string {
+    return fmt.Sprintf("FieldElement_%d(%d)", f.prime, f.num)
+}</code></pre>
+
+      <h3>4. 동일성 검사</h3>
+      <p>두 유한체 원소가 같은지 확인하는 메서드입니다.</p>
+      <pre><code class="language-go">// 동일한 유한체 원소인지 확인하는 함수
+func (f *FieldElement) Equals(other *FieldElement) bool {
+    return f.num == other.num && f.prime == other.prime
+}</code></pre>
+
+      <h3>5. 덧셈 연산</h3>
+      <p>두 유한체 원소를 더하는 메서드입니다. 같은 유한체에 속해야 합니다.</p>
+      <pre><code class="language-go">// 유한체 원소 덧셈
+func (f *FieldElement) Add(other *FieldElement) (*FieldElement, error) {
+    if f.prime != other.prime {
+        return nil, fmt.Errorf("cannot add two numbers in different Fields %d, %d", f.prime, other.prime)
+    }
+    num := (f.num + other.num) % f.prime
+    return NewFieldElement(num, f.prime)
+}</code></pre>
+
+      <h3>6. 뺄셈 연산</h3>
+      <p>
+        두 유한체 원소를 빼는 메서드입니다. 음수가 될 경우 prime을 더해 양수로
+        만듭니다.
+      </p>
+      <pre><code class="language-go">// 유한체 원소 뺄셈
+func (f *FieldElement) Sub(other *FieldElement) (*FieldElement, error) {
+    if f.prime != other.prime {
+        return nil, fmt.Errorf("cannot add two numbers in different Fields %d, %d", f.prime, other.prime)
+    }
+    num := (f.num - other.num) % f.prime
+    // 음수일 경우 prime을 더해줌
+    if num < 0 {
+        num += f.prime
+    }
+    return NewFieldElement(num, f.prime)
+}</code></pre>
+
+      <h3>7. 곱셈 연산</h3>
+      <p>두 유한체 원소를 곱하는 메서드입니다.</p>
+      <pre><code class="language-go">// 유한체 원소 곱셈
+func (f *FieldElement) Mul(other *FieldElement) (*FieldElement, error) {
+    if f.prime != other.prime {
+        return nil, fmt.Errorf("cannot add two numbers in different Fields %d, %d", f.prime, other.prime)
+    }
+    num := (f.num * other.num) % f.prime
+    return NewFieldElement(num, f.prime)
+}</code></pre>
+
+      <h3>8. 거듭제곱 연산</h3>
+      <p>
+        유한체 원소의 거듭제곱을 계산하는 메서드입니다. 페르마의 소정리를
+        활용합니다.
+      </p>
+      <pre><code class="language-go">// 유한체 원소 거듭제곱
+func (f *FieldElement) Pow(exp int) (*FieldElement, error) {
+    exp %= (f.prime - 1)
+    // 지수가 음수일 경우 양수로 변환
+    if exp < 0 {
+        exp += (f.prime - 1)
+    }
+    num := pow(f.num, exp, f.prime) % f.prime
+    return NewFieldElement(num, f.prime)
+}</code></pre>
+
+      <h3>9. 나눗셈 연산</h3>
+      <p>
+        유한체 원소의 나눗셈을 계산하는 메서드입니다. 페르마의 소정리를 이용해
+        나눗셈을 곱셈으로 변환합니다.
+      </p>
+      <pre><code class="language-go">// 유한체 원소 나눗셈
+func (f *FieldElement) Div(other *FieldElement) (*FieldElement, error) {
+    if f.prime != other.prime {
+        return nil, fmt.Errorf("cannot add two numbers in different Fields %d, %d", f.prime, other.prime)
+    }
+    // 페르마의 소정리를 이용하여 나눗셈을 곱셈으로 변환
+    num := (f.num * pow(other.num, f.prime-2, f.prime)) % f.prime
+    return NewFieldElement(num, f.prime)
+}</code></pre>
+
+      <h3>10. 거듭제곱 계산 함수</h3>
+      <p>분할 정복을 사용한 효율적인 거듭제곱 계산 함수입니다.</p>
+      <pre><code class="language-go">// 거듭제곱을 구하는 함수 (분할 정복 사용)
+func pow(num, exp, mod int) int {
+    if exp == 0 {
+        return 1
+    }
+    if exp == 1 {
+        return num
+    }
+    if exp%2 == 0 {
+        temp := pow(num, exp/2, mod)
+        return (temp * temp) % mod
+    }
+    temp := pow(num, (exp-1)/2, mod)
+    return (temp * temp * num) % mod
+}</code></pre>
+
+      <h3>11. 사용 예제</h3>
+      <p>구현한 유한체 연산을 사용하는 예제입니다.</p>
+      <pre><code class="language-go">func main() {
+    a, _ := NewFieldElement(7, 13)
+    b, _ := NewFieldElement(6, 13)
+
+    fmt.Println(a.Equals(b))  // false
+    fmt.Println(a.Equals(a))  // true
+
+    c, _ := a.Add(b)          // FieldElement_13(0)
+    fmt.Println(c)
+
+    d, _ := a.Sub(b)          // FieldElement_13(1)
+    fmt.Println(d)
+
+    e, _ := a.Mul(b)          // FieldElement_13(3)
+    fmt.Println(e)
+
+    f, _ := a.Pow(-3)         // FieldElement_13(8)
+    fmt.Println(f)
+
+    g, _ := a.Div(b)          // FieldElement_13(12)
+    fmt.Println(g)
+}</code></pre>
+    </article>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
+</html>
