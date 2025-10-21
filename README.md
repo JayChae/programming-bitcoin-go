@@ -26,7 +26,7 @@
   <tbody>
     <tr>
       <th align="left">Code</th>
-      <td><a href="./chapter1-finite-field/field-element.go">field-element.go</a></td>
+      <td><a href="https://github.com/JayChae/programming-bitcoin-go/blob/main/chapter1-finite-field/field-element.go">field-element.go</a></td>
     </tr>
     <tr>
       <th align="left">Post</th>
@@ -44,7 +44,7 @@
   <tbody>
     <tr>
       <th align="left">Code</th>
-      <td><a href="./chapter2-elliptic-curve/elliptic-curve.go">elliptic-curve.go</a></td>
+      <td><a href="https://github.com/JayChae/programming-bitcoin-go/blob/main/chapter2-elliptic-curve/elliptic-curve.go">elliptic-curve.go</a></td>
     </tr>
     <tr>
       <th align="left">Post</th>
