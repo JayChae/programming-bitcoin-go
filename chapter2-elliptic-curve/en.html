@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Chapter 2 of Programming Bitcoin from scratch. Learn the mathematical concepts of elliptic curves that form the foundation of elliptic curve cryptography used in Bitcoin signatures and verification, and implement elliptic curve point addition in Go."
+    />
+    <meta
+      name="keywords"
+      content="Programming Bitcoin,Elliptic Curve, Elliptic Curve Cryptography, Bitcoin, Digital Signature, Go, Golang, Fermat's Little Theorem"
+    />
+    <meta name="author" content="Ivar" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="./en.html" />
+    <link rel="alternate" hreflang="ko" href="./index.html" />
+    <link rel="alternate" hreflang="en" href="./en.html" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Chapter 2: Elliptic Curve" />
+    <meta
+      property="og:description"
+      content="Chapter 2 of Programming Bitcoin from scratch. Learn the mathematical concepts of elliptic curves that form the foundation of elliptic curve cryptography used in Bitcoin signatures and verification, and implement elliptic curve point addition in Go."
+    />
+    <meta property="og:url" content="./en.html" />
+    <meta property="og:site_name" content="Programming Bitcoin" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Programming Bitcoin Book Chapter 2: Elliptic Curve"
+    />
+    <meta
+      name="twitter:description"
+      content="Chapter 2 of Programming Bitcoin from scratch. Learn the mathematical concepts of elliptic curves that form the foundation of elliptic curve cryptography used in Bitcoin signatures and verification, and implement elliptic curve point addition in Go."
+    />
+    <link rel="stylesheet" href="https://latex.vercel.app/style.css" />
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      as="style"
+      crossorigin
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css"
+    />
+
+    <title>Chapter 2: Elliptic Curve (Programming Bitcoin)</title>
+  </head>
+  <body style="font-family: Pretendard Variable">
+    <article>
+      <h1>Chapter 2: Elliptic Curve</h1>
+      <p class="author">
+        Ivar <br />
+        October 21, 2025
+        <br />
+        <a href="./index.html">한국어</a>
+        <br />
+        <a href="./chapter1-finite-field/index.html">Chapter 1: Finite Field</a>
+      </p>
+
+      <div class="abstract">
+        <h2>Abstract</h2>
+        <p>
+          Learn the mathematical concepts of elliptic curves that form the
+          foundation of elliptic curve cryptography used in Bitcoin signatures
+          and verification, and implement elliptic curve point addition in Go.
+        </p>
+      </div>
+
+      <section>
+        <h2>Definition of Elliptic Curve</h2>
+        <strong>
+          <p>y<sup>2</sup> = x<sup>3</sup> + ax + b</p>
+        </strong>
+        <img
+          src="https://cf-assets.www.cloudflare.com/zkvhlag99gkb/7C9LODC0OpfZlr9E8kqrSP/4248aa3bd2bf09e9f2c5eb7073c8ccfe/image00.png"
+          alt="Elliptic curve definition"
+        />
+
+        <h2>secp256k1</h2>
+        <p>
+          secp256k1 is the elliptic curve used in Bitcoin. It is defined as
+          follows.
+        </p>
+        <strong>
+          <p>y<sup>2</sup> = x<sup>3</sup> + 7</p>
+        </strong>
+        <img
+          src="https://mblogthumb-phinf.pstatic.net/MjAxODAxMDVfMjA3/MDAxNTE1MTIwNzU2Mzg4.-O3OYGeOa7qhb3XL4zNeyVTUu-QztZOTNCB5usfDlzsg.WQ_YS2FHvXxbrzIKQ0FBFvJBdf90Zj7x5JuNwEVKWH8g.JPEG.aepkoreanet/secpcurve.jpg?type=w2"
+          alt="secp256k1"
+        />
+      </section>
+
+      <section>
+        <h2>Elliptic Curve Point Addition</h2>
+
+        <p>
+          The point P+Q is defined as the point obtained by reflecting the
+          intersection of the line passing through two points P and Q with the
+          elliptic curve across the x-axis.
+        </p>
+
+        <img
+          src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*nEPoRrtkwEkzbA_UMRp-wA.jpeg"
+        />
+
+        <p>
+          Elliptic curve point addition is a nonlinear operation
+          <label for="sn-1" class="sidenote-toggle sidenote-number"></label>
+          <input type="checkbox" id="sn-1" class="sidenote-toggle" />
+          <span class="sidenote">
+            An operation where changes in input do not proportionally affect the
+            output.
+          </span>
+          where the result cannot be easily predicted.
+        </p>
+      </section>
+
+      <section>
+        <h2>Properties of Point Addition</h2>
+        <p>
+          Point addition satisfies the following properties similar to ordinary
+          addition:
+        </p>
+        <ul>
+          <li>
+            Identity element exists
+            <label for="sn-2" class="sidenote-toggle sidenote-number"></label>
+            <input type="checkbox" id="sn-2" class="sidenote-toggle" />
+            <span class="sidenote">
+              An identity element is an element 0 such that a + 0 = a for any a.
+            </span>
+          </li>
+          <li>
+            Inverse element exists
+            <label for="sn-3" class="sidenote-toggle sidenote-number"></label>
+            <input type="checkbox" id="sn-3" class="sidenote-toggle" />
+            <span class="sidenote">
+              An inverse element is an element b such that a + b = 0 for any a.
+            </span>
+          </li>
+          <li>
+            Commutative property holds
+            <label for="sn-4" class="sidenote-toggle sidenote-number"></label>
+            <input type="checkbox" id="sn-4" class="sidenote-toggle" />
+            <span class="sidenote"> For addition, a + b = b + a holds. </span>
+          </li>
+          <li>
+            Associative property holds
+            <label for="sn-5" class="sidenote-toggle sidenote-number"></label>
+            <input type="checkbox" id="sn-5" class="sidenote-toggle" />
+            <span class="sidenote">
+              For addition, (a + b) + c = a + (b + c) holds.
+            </span>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Point at Infinity I</h2>
+        <strong><p>A + (-A) = I</p></strong>
+        <img
+          src="https://www.herongyang.com/EC-Cryptography/Elliptic-Curve-with-Infinity-Point.jpg"
+          alt="Point at infinity I"
+        />
+
+        <p>
+          The point obtained by adding two points where a vertical line
+          intersects the curve never meets the graph again. This point is
+          defined as the point at infinity with infinite value.
+        </p>
+
+        <strong><p>I + A = A</p></strong>
+        <p>
+          The point at infinity is the identity element (like 0) in elliptic
+          curves.
+        </p>
+      </section>
+
+      <section>
+        <h2>Point Addition when x1 ≠ x2</h2>
+        <p>
+          When P1 = (x1, y1), P2 = (x2, y2), P3 = (x3, y3) and the slope is s,
+          we have:
+        </p>
+        <ul class="">
+          <li>
+            <strong
+              >s = (y<sub>2</sub> - y<sub>1</sub>) / (x<sub>2</sub> -
+              x<sub>1</sub>)</strong
+            >
+          </li>
+
+          <li>
+            <strong
+              >x<sub>3</sub> = s<sup>2</sup> - x<sub>1</sub> - x<sub
+                >2</sub
+              ></strong
+            >
+          </li>
+
+          <li>
+            <strong
+              >y<sub>3</sub> = s(x<sub>3</sub> - x<sub>1</sub>) - y<sub
+                >1</sub
+              ></strong
+            >
+          </li>
+        </ul>
+        <br />
+        <details style="cursor: pointer">
+          <summary>Proof</summary>
+          <p>
+            Slope: s = (y<sub>2</sub> - y<sub>1</sub>) / (x<sub>2</sub> -
+            x<sub>1</sub>)
+          </p>
+          <p>
+            Line passing through two points: y = s(x - x<sub>1</sub>) + y<sub
+              >1</sub
+            >
+          </p>
+          <p>
+            Elliptic curve: y<sup>2</sup> = x<sub>3</sub><sup>3</sup> + ax<sub
+              >3</sub
+            >
+            + b
+          </p>
+          <p>
+            Since the line intersects the elliptic curve at three points,
+            substituting the line into the elliptic curve gives:
+          </p>
+          <p>
+            y<sup>2</sup> = (s(x - x<sub>1</sub>) + y<sub>1</sub>)<sup>2</sup> =
+            x<sub>3</sub><sup>3</sup> + ax<sub>3</sub>
+            + b
+          </p>
+          <p>Collecting all terms by degree of x in descending order:</p>
+          <p>
+            x<sub>3</sub><sup>3</sup> - s<sup>2</sup>x<sup>2</sup> + (a +
+            2s<sup>2</sup>x<sub>1</sub> - 2sy<sub>1</sub>)x + b
+            -s<sup>2</sup>x<sub>1</sub><sup>2</sup> + 2sx<sub>1</sub>y<sub
+              >1</sub
+            >
+            - y<sub>1</sub><sup>2</sup> = 0
+          </p>
+          <p>
+            Since x<sub>1</sub>, x<sub>2</sub>, x<sub>3</sub> are roots of this
+            equation, we can write:
+          </p>
+          <p>
+            (x - x<sub>1</sub>)(x - x<sub>2</sub>)(x - x<sub>3</sub>) = x<sub
+              >3</sub
+            ><sup>3</sup> - (x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub>)x<sub
+              >2</sub
+            >
+            + (x<sub>1</sub>x<sub>2</sub> + x<sub>1</sub>x<sub>3</sub> +
+            x<sub>2</sub>x<sub>3</sub>)x - x<sub>1</sub>x<sub>2</sub>x<sub
+              >3</sub
+            >
+            = 0
+          </p>
+          <p>
+            Since these are the same equation, the coefficients of the same
+            degree must be equal. Comparing the coefficients of x<sup>2</sup>:
+          </p>
+          <p>s<sup>2</sup> = x<sub>1</sub> + x<sub>2</sub> + x<sub>3</sub></p>
+          <p>x<sub>3</sub> = s<sup>2</sup> - x<sub>1</sub> - x<sub>2</sub></p>
+          <p>
+            Substituting this x<sub>3</sub> into the line equation gives
+            -y<sub>3</sub>. To get y<sub>3</sub>, we need to change the sign.
+          </p>
+          <p>
+            y<sub>3</sub> = s(x<sub>1</sub> - x<sub>3</sub>) - y<sub>1</sub>
+          </p>
+        </details>
+      </section>
+
+      <section>
+        <h2>Point Addition when P<sub>1</sub> = P<sub>2</sub></h2>
+
+        <img
+          src="https://www.herongyang.com/EC-Cryptography/Elliptic-Curve-with-Same-Point-Addition.png"
+          alt="Point addition when P1 = P2"
+        />
+
+        <p>
+          The line connecting two identical points on the curve represents the
+          tangent at that point. Therefore, to find the result of adding two
+          identical points, we need to find the other intersection point where
+          the tangent meets the curve.
+        </p>
+        <ul class="">
+          <li>
+            <strong
+              >s = (3x<sub>1</sub><sup>2</sup> + a) / (2y<sub>1</sub>)</strong
+            >
+          </li>
+
+          <li>
+            <strong>x<sub>3</sub> = s<sup>2</sup> - 2x<sub>1</sub></strong>
+          </li>
+
+          <li>
+            <strong
+              >y<sub>3</sub> = s(x<sub>1</sub> - x<sub>3</sub>) - y<sub
+                >1</sub
+              ></strong
+            >
+          </li>
+        </ul>
+        <br />
+        <details style="cursor: pointer">
+          <summary>Proof</summary>
+          By differentiating the elliptic curve, we can find the derivative to
+          get the slope formula of the tangent.
+          <p>
+            <strong>y<sup>2</sup> = x<sup>3</sup> + ax + b</strong>
+          </p>
+          <p>Differentiating both sides:</p>
+          <p>2y dy = (3x<sup>2</sup> + a) dx</p>
+          <p>dy / dx = (3x<sup>2</sup> + a) / (2y)</p>
+          <p>
+            Substituting x<sub>1</sub> and y<sub>1</sub> into this slope formula
+            gives the slope s.
+          </p>
+          <p>s = (3x<sub>1</sub><sup>2</sup> + a) / (2y<sub>1</sub>)</p>
+        </details>
+      </section>
+
+      <section>
+        <h2>When P<sub>1</sub> = P<sub>2</sub> and y = 0</h2>
+
+        <img src="./exception.png" alt="When P1 = P2 and y = 0" />
+        <p>
+          When two points are the same and y = 0, the denominator becomes 0 and
+          we cannot find the slope. In this case, we handle the exception by
+          returning the point at infinity.
+        </p>
+      </section>
+
+      <section>
+        <h2>Implementing Elliptic Curve Point Addition in Go</h2>
+        <p>
+          Now let's implement the elliptic curve point addition theory we
+          learned above in Go. I'll explain the code by functionality.
+        </p>
+      </section>
+
+      <section>
+        <h2>1. Basic Structure and Constructor</h2>
+        <p>
+          First, let's implement the structure representing points on the
+          elliptic curve and the constructor function.
+        </p>
+
+        <pre><code class="language-go">package main
+
+import (
+	"fmt"
+	"math"
+)
+
+// Structure representing points on the elliptic curve
+type Point struct {
+	x, y, a, b float64
+}
+
+// Function to create points on the elliptic curve
+func NewPoint(x, y, a, b float64) (*Point, error) {
+	// Check if it's the point at infinity
+	if isInfinity(x, y) {
+		return &Point{x: x, y: y, a: a, b: b}, nil
+	}
+
+	// Check if the given point is on the elliptic curve
+	if !isOnCurve(x, y, a, b) {
+		return nil, fmt.Errorf("(%.2f, %.2f) is not on the curve", x, y)
+	}
+
+	return &Point{x: x, y: y, a: a, b: b}, nil
+}
+
+// String representation of elliptic curve points
+func (p *Point) String() string {
+	// Check if it's the point at infinity
+	if isInfinity(p.x, p.y) {
+		return "Point(infinity)"
+	}
+	return fmt.Sprintf("Point(%.2f, %.2f)_%.2f_%.2f", p.x, p.y, p.a, p.b)
+}</code></pre>
+
+        <p><strong>Explanation:</strong></p>
+        <ul>
+          <li>
+            The <code>Point</code> structure represents a point on the elliptic
+            curve, containing x, y coordinates and the elliptic curve
+            coefficients a, b.
+          </li>
+          <li>
+            The <code>NewPoint</code> function validates whether the point is on
+            the elliptic curve when creating a point.
+          </li>
+          <li>
+            The <code>String()</code> method represents the point as a string.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>2. Utility Functions</h2>
+        <p>
+          Let's implement the basic utility functions needed for point addition.
+        </p>
+
+        <pre><code class="language-go">// Function to check if it's the point at infinity
+func isInfinity(x, y float64) bool {
+	return x == math.MaxFloat64 && y == math.MaxFloat64
+}
+
+// Function to check if the point is on the elliptic curve
+func isOnCurve(x, y, a, b float64) bool {
+	return y*y == x*x*x+a*x+b
+}
+
+// Function to check if two points are inverses of each other
+func areInverse(x1, x2, y1, y2 float64) bool {
+	return x1 == x2 && y1 != y2
+}
+
+// Function to check if two elliptic curves are the same
+func sameCurve(a1, b1, a2, b2 float64) bool {
+	return a1 == a2 && b1 == b2
+}
+
+// Function to check if two points are the same
+func samePoint(x1, y1, x2, y2 float64) bool {
+	return x1 == x2 && y1 == y2
+}
+
+// Function to check if two elliptic curve points are the same
+func (p *Point) Equals(other *Point) bool {
+	// Check if the coordinates are the same and on the same elliptic curve
+	return samePoint(p.x, p.y, other.x, other.y) &&
+		sameCurve(p.a, p.b, other.a, other.b)
+}
+
+// Function to check if two elliptic curve points are different
+func (p *Point) NotEquals(other *Point) bool {
+	return !(samePoint(p.x, p.y, other.x, other.y) &&
+		sameCurve(p.a, p.b, other.a, other.b))
+}</code></pre>
+
+        <p><strong>Explanation:</strong></p>
+        <ul>
+          <li>
+            <code>isInfinity</code>: Represents the point at infinity using
+            <code>math.MaxFloat64</code>.
+          </li>
+          <li>
+            <code>isOnCurve</code>: Checks if the point satisfies the elliptic
+            curve equation y² = x³ + ax + b.
+          </li>
+          <li>
+            <code>areInverse</code>: Checks if two points have the same
+            x-coordinate but different y-coordinates (inverse relationship).
+          </li>
+          <li>
+            <code>Equals</code>, <code>NotEquals</code>: Compare equality of two
+            points.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>3. Point Addition Case Classification</h2>
+        <p>
+          Let's implement the logic to classify which case applies before
+          performing point addition.
+        </p>
+
+        <pre><code class="language-go">// Enumeration representing point addition cases
+type AdditionCase int
+
+const (
+	InfinityPoint AdditionCase = iota
+	InversePoints
+	SamePoints
+	DifferentPoints
+)
+
+// Function to determine point addition case
+func determineAdditionCase(p, other *Point) AdditionCase {
+	// Case when p is the point at infinity
+	if isInfinity(p.x, p.y) {
+		return InfinityPoint
+	}
+	
+	// Case when other is the point at infinity
+	if isInfinity(other.x, other.y) {
+		return InfinityPoint
+	}
+	
+	// Case when adding the inverse of a point
+	if areInverse(p.x, other.x, p.y, other.y) {
+		return InversePoints
+	}
+	
+	// Case when the points are the same
+	if samePoint(p.x, p.y, other.x, other.y) {
+		return SamePoints
+	}
+	
+	// Case when the points are different
+	return DifferentPoints
+}</code></pre>
+
+        <p><strong>Explanation:</strong></p>
+        <ul>
+          <li>
+            <code>AdditionCase</code>: Defines the 4 cases of point addition.
+          </li>
+          <li>
+            <code>determineAdditionCase</code>: Analyzes the relationship
+            between two points to determine the appropriate case.
+          </li>
+          <li>
+            Case priority: Point at infinity → Inverse → Same point → Different
+            points
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>4. Main Point Addition Logic</h2>
+        <p>
+          Now let's implement the main function that performs the actual point
+          addition.
+        </p>
+
+        <pre><code class="language-go">// Add two elliptic curve points
+func (p *Point) Add(other *Point) (*Point, error) {
+	// Check if they are on the same elliptic curve
+	if !sameCurve(p.a, p.b, other.a, other.b) {
+		return nil, fmt.Errorf("points %s and %s are not on the same curve", p, other)
+	}
+
+	switch determineAdditionCase(p, other) {
+	case InfinityPoint:
+		// case1: Handle point at infinity
+		if isInfinity(p.x, p.y) {
+			return other, nil
+		}
+		return p, nil
+		
+	case InversePoints:
+		// case2: When inverses, return point at infinity
+		return NewPoint(math.MaxFloat64, math.MaxFloat64, p.a, p.b)
+		
+	case SamePoints:
+		// case3: When the same point (point doubling)
+		// Exception handling: When tangent is perpendicular to x-axis, return point at infinity
+		if p.y == 0 {
+			return NewPoint(math.MaxFloat64, math.MaxFloat64, p.a, p.b)
+		}
+		// Find slope of tangent
+		s := (3*p.x*p.x + p.a) / (2 * p.y)
+
+		// Find coordinates of intersection of tangent and elliptic curve
+		nx := s*s - 2*p.x
+		ny := s*(nx-p.x) + p.y
+
+		// Reflect intersection across y-axis
+		ny = -ny
+
+		return NewPoint(nx, ny, p.a, p.b)
+		
+	case DifferentPoints:
+		// case4: When different points
+		// Find slope of line passing through p and other
+		s := (other.y - p.y) / (other.x - p.x)
+
+		// Find coordinates of other intersection point where line meets elliptic curve
+		nx := s*s - p.x - other.x
+		ny := s*(nx-p.x) + p.y
+
+		// Reflect result of point addition across y-axis
+		ny = -ny
+
+		return NewPoint(nx, ny, p.a, p.b)
+		
+	default:
+		return nil, fmt.Errorf("unexpected addition case")
+	}
+}</code></pre>
+
+        <p><strong>Explanation:</strong></p>
+        <ul>
+          <li>
+            <strong>Case 1 (Point at infinity)</strong>: The point at infinity
+            is the identity element, so it returns the other point as is.
+          </li>
+          <li>
+            <strong>Case 2 (Inverse)</strong>: Adding inverses returns the point
+            at infinity.
+          </li>
+          <li>
+            <strong>Case 3 (Same point)</strong>: Exception handling when y=0.
+          </li>
+          <li>
+            <strong>Case 4 (Different points)</strong>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>5. Testing and Execution</h2>
+
+        <pre><code class="language-go">func main() {
+	p1, _ := NewPoint(-1, -1, 5, 7)
+	fmt.Println(p1)
+
+	p2, _ := NewPoint(2, 5, 5, 7)
+	fmt.Println(p2)
+
+	fmt.Println(p1.Equals(p2))
+	fmt.Println(p1.NotEquals(p2))
+
+	p3, _ := NewPoint(1, 4, 8, 7)
+	fmt.Println(p3)
+
+	p4, _ := NewPoint(-1, 1, 5, 7)
+	fmt.Println(p4)
+
+	inf, _ := p1.Add(p4)
+	fmt.Println(inf)
+
+	p5, _ := p1.Add(p2)
+	fmt.Println(p5)
+
+	p6, _ := p1.Add(p1)
+	fmt.Println(p6)
+}</code></pre>
+
+        <h3>Execution Result</h3>
+        <pre><code>Point(-1.00, -1.00)_5.00_7.00
+Point(2.00, 5.00)_5.00_7.00
+false
+true
+Point(1.00, 4.00)_8.00_7.00
+Point(-1.00, 1.00)_5.00_7.00
+Point(infinity)
+Point(3.00, -7.00)_5.00_7.00
+Point(18.00, 77.00)_5.00_7.00</code></pre>
+      </section>
+
+      <div class="footnotes">
+        <p>Sources of Reference and Inspiration</p>
+        <p>
+          <a
+            href="https://www.oreilly.com/library/view/programming-bitcoin/9781492031482/"
+          >
+            Programming Bitcoin
+          </a>
+        </p>
+        <p>
+          <a href="https://github.com/piatoss3612/bitcoin-from-scratch">
+            bitcoin-from-scratch
+          </a>
+        </p>
+      </div>
+    </article>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  </body>
+</html>

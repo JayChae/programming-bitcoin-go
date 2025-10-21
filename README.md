@@ -26,13 +26,31 @@
   <tbody>
     <tr>
       <th align="left">Code</th>
-      <td><a href="https://github.com/JayChae/programming-bitcoin-go/blob/main/chapter1-finite-field/field-element.go">field-element.go</a></td>
+      <td><a href="./chapter1-finite-field/field-element.go">field-element.go</a></td>
     </tr>
     <tr>
       <th align="left">Post</th>
-      <td><a href="https://jaychae.github.io/programming-bitcoin-go/chapter1-finite-field/index.html">한국어</a>
+      <td><a href="./chapter1-finite-field/index.html">한국어</a>
       <br/>
-      <a href="https://jaychae.github.io/programming-bitcoin-go/chapter1-finite-field/en.html">English</a>
+      <a href="./chapter1-finite-field/en.html">English</a>
+      </td>
+    </tr>
+  </tbody>
+  </table>
+
+## 2. 타원곡선
+
+<table>
+  <tbody>
+    <tr>
+      <th align="left">Code</th>
+      <td><a href="./chapter2-elliptic-curve/elliptic-curve.go">elliptic-curve.go</a></td>
+    </tr>
+    <tr>
+      <th align="left">Post</th>
+      <td><a href="./chapter2-elliptic-curve/index.html">한국어</a>
+      <br/>
+      <a href="./chapter2-elliptic-curve/en.html">English</a>
       </td>
     </tr>
   </tbody>
