@@ -4,9 +4,9 @@
 
 ## Post
 
-<a href="./index.html">한국어</a>
+<a href="https://jaychae.github.io/programming-bitcoin-go/chapter2-elliptic-curve/index.html">한국어</a>
 <br/>
-<a href="./en.html">English</a>
+<a href="https://jaychae.github.io/programming-bitcoin-go/chapter2-elliptic-curve/en.html">English</a>
 
 ## Code
 

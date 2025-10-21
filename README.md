@@ -30,9 +30,9 @@
     </tr>
     <tr>
       <th align="left">Post</th>
-      <td><a href="./chapter1-finite-field/index.html">한국어</a>
+      <td><a href="https://jaychae.github.io/programming-bitcoin-go/chapter1-finite-field/index.html">한국어</a>
       <br/>
-      <a href="./chapter1-finite-field/en.html">English</a>
+      <a href="https://jaychae.github.io/programming-bitcoin-go/chapter1-finite-field/en.html">English</a>
       </td>
     </tr>
   </tbody>
@@ -48,9 +48,9 @@
     </tr>
     <tr>
       <th align="left">Post</th>
-      <td><a href="./chapter2-elliptic-curve/index.html">한국어</a>
+      <td><a href="https://jaychae.github.io/programming-bitcoin-go/chapter2-elliptic-curve/index.html">한국어</a>
       <br/>
-      <a href="./chapter2-elliptic-curve/en.html">English</a>
+      <a href="https://jaychae.github.io/programming-bitcoin-go/chapter2-elliptic-curve/en.html">English</a>
       </td>
     </tr>
   </tbody>
